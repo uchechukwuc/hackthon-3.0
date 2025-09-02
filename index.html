@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Buddy</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="main-nav">
+            <div class="logo">🧠 AI Study Buddy</div>
+            <div class="user-actions">
+                {% if current_user.is_authenticated %}
+                    <span class="user-info">
+                        Hi, {{ current_user.username }}! | Credits: <span id="credits-display">{{ current_user.credits }}</span>
+                    </span>
+                    <button id="buy-credits-btn" class="secondary-btn">Buy Credits</button>
+                    <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="auth-link">Login</a>
+                    <a href="{{ url_for('register') }}" class="auth-link register-link">Register</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <header>
+            <h1>Unlock Your Potential</h1>
+            <p>Paste your notes, and let AI create your flashcards instantly!</p>
+        </header>
+        
+        {% if current_user.is_authenticated %}
+        <main>
+            <div class="input-section">
+                <textarea id="notes-input" placeholder="Paste your study notes here..."></textarea>
+                <button id="generate-btn">Generate Flashcards (1 Credit)</button>
+            </div>
+            
+            <div id="status-message" class="status-message" role="status"></div>
+
+            <div id="flashcard-container" class="flashcard-grid"></div>
+        </main>
+        {% else %}
+        <div class="logged-out-view">
+            <h2>Welcome!</h2>
+            <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a> to start generating flashcards.</p>
+            
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
